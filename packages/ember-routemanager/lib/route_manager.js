@@ -527,8 +527,13 @@ Ember.RouteManager = Ember.StateManager.extend({
     var base = get(routes, 'baseURI'), loc = (base.charAt(0) === '/') ? document.location.pathname : document.location.href;
 
     if(loc.slice(0, base.length) === base) {
-      // Remove the base prefix and the extra '/'
-      loc = loc.slice(base.length + 1, loc.length);
+      // Remove the base prefix and the extra '/' if base ends with '/'
+      var delta = 0;
+      if (base.charAt(base.length - 1) === '/'){
+        delta = 1
+      }
+      
+      loc = loc.slice(base.length + delta, loc.length);
 
       if(get(routes, 'location') !== loc && !routes._skipRoute) {
         Ember.run.once(function() {
